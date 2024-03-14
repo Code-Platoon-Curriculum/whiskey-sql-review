@@ -95,13 +95,15 @@ CREATE TABLE employee (
     salary DECIMAL(7,2) NOT NULL CHECK (salary > 31987.19 AND salary < 60000.01)
 );
 
+CREATE INDEX idx_employee_name ON  employee(employee_name);
+
 \COPY employee FROM './data/employee.csv' WITH CSV HEADER;
 
 DROP TABLE IF EXISTS social_security;
 
 CREATE TABLE social_security(
     id SERIAL PRIMARY KEY,
-    employee_id INT,
+    employee_id INT UNIQUE,
     ssn VARCHAR(11) UNIQUE NOT NULL CHECK (ssn ~ '^\d{3}-\d{2}-\d{4}$'),
     FOREIGN KEY (employee_id) REFERENCES employee(id)
 );
